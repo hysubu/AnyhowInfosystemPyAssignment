@@ -25,6 +25,9 @@ urlpatterns = [
     path('api/fetchinventory/', fetch_inventory),
     path('api/updateinventory/', approved_inventory),
     path('api/deleteinventory/', delete_inventory),
+    path('api/fetcheditinventory/', fetch_edit_inventory),
+    path('api/changeinventory/', change_Inventory),
+
 
 
 

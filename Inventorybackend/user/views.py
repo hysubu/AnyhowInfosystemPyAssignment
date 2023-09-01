@@ -25,6 +25,8 @@ def signup(request):
             return JsonResponse({'success': False, 'message': 'Username already Exists',}, status=400)
         elif email.exists():
             return JsonResponse({'success': False,"message":"Email already exists"} , status=400)
+        elif data["password"] == "":
+            return JsonResponse({"success":False , "message":"Password required"})
         else:
             password_hash =  passwordhash(password=data["password"])
             print(password_hash["password"])
@@ -52,23 +54,21 @@ def login(request):
         fil_user_name = User.objects.filter(username = username)
         if fil_user_name.exists():
             if len(fil_user_name) == 1 :
-                print(fil_user_name)
                 get_data_from_db = fil_user_name.values("password_key", "password","role")[0]
-                print(get_data_from_db)
                 get_password_key_from_dict = get_data_from_db["password_key"]
                 get_password_from_dict =  get_data_from_db["password"]
-                print(get_password_key_from_dict)
                 fernet = Fernet(get_password_key_from_dict)
                 decrept_password =  fernet.decrypt(get_password_from_dict).decode()
-                print(decrept_password)
                 if password == decrept_password :
                     role_id = get_data_from_db["role"]
                     role = Role.objects.get(id=role_id)
                     return JsonResponse({'success': True, 'message': 'Login successfully',"role":role.role })
                 else:
-                    return JsonResponse({"error":"Invalid password"} , status = 400)
+                    return JsonResponse({"success": False , "message":"Invalid password"}, status = 400)
+        else :
+            return JsonResponse({"success":False, "message":"username invalid"})
     except Exception as e :
-        print(e)
+        return JsonResponse({"success": False, "message": str(e)}, status=500)
 
 
 
@@ -92,7 +92,7 @@ def addinventory(request):
                     quantity = data["quantity"],
                     batch_date = batch_data
                 ).save()
-                return JsonResponse({"success":True, "message":"Inventory Added Successfully!"},  status = 201)
+                return JsonResponse({"success":True, "message":"Inventory Added Successfully!"},status = 201)
             except Exception as e :
                 return JsonResponse({"success": False, "message": str(e)}, status=500)
         elif  data["role"] == "Store Manager" :
@@ -128,11 +128,10 @@ def fetch_inventory(request):
             print(all)
             all_inventory = InventoryRecord.objects.filter(delete = False) 
             py_to_json_approved = serializers.serialize('json',all_inventory)
-            # print(py_to_json_approved)
             return JsonResponse({"success":True, "message":"successfull fetching", "all_inventory":py_to_json_approved})
         elif data == "Store Manager":
             print("dataa")
-            pending_inventory = InventoryRecord.objects.filter(status="Pending", delete=True) 
+            pending_inventory = InventoryRecord.objects.filter(status="Pending", delete=False) 
             py_to_json =  serializers.serialize('json', pending_inventory)
             print(py_to_json)
             return JsonResponse({"success":True, "message":"successfull fetching", "all_inventory":py_to_json })
@@ -141,10 +140,6 @@ def fetch_inventory(request):
     except Exception as e :
         print(e)
 
-
-
-
-    
 
 
 # Approval API
@@ -172,27 +167,73 @@ def approved_inventory(request):
 
 
 
+#fetching Edit  Inventory data 
+
+@api_view(["POST"])
+def fetch_edit_inventory(request):
+    try :
+        data = request.data
+        if data["role"] == "Department Manager":
+            print("hello")
+            get_inventory = InventoryRecord.objects.get(id = data["item_id"])
+            print(get_inventory)
+            inventory_data = {
+                "id": get_inventory.id,
+                "product_name": get_inventory.product_name,
+                "vendor": get_inventory.vendor,
+                "mrp": get_inventory.mrp,
+                "batch_num": get_inventory.batch_num,
+                "quantity": get_inventory.quantity,
+                "batch_date": get_inventory.batch_date,  # Convert date to string
+                "status": get_inventory.status,
+                # Add more attributes as needed
+            }
+            return JsonResponse({"success": True, "message": "Data fetched successfully", "data": inventory_data})
+        else:
+            return JsonResponse({"success": False, "message": "Invalid role"}, status=400)
+    except InventoryRecord.DoesNotExist:
+        return JsonResponse({"success": False, "message": "Inventory not found"}, status=404)
+    except KeyError as e:
+        return JsonResponse({"success": False, "message": f"Missing field: {e}"}, status=400)
+    except Exception as e:
+        return JsonResponse({"success": False, "message": str(e)}, status=500)
+
+    
+
+
 
 
 # Edit Inventory API for Department Manager 
-@api_view(["POST"])
+@api_view(["PUT"])
 def change_Inventory(request):
-    data = request.data 
-    if data["role"] == "Department Manager":
-        filter_indentory =  InventoryRecord.objects.filter(id = data["edit_item_id"])
-        if filter_indentory.exists():
-            batch_data = datetime.strptime(data["batch_date"], '%Y-%m-%d').date()
-            print(batch_data)
-            filter_indentory.update(
-                product_name = data["product_name"], 
-                vendor = data["vendor"],
-                mrp = data["mrp"], 
-                batch_num = data["batch_num"],
-                quantity = data["quantity"],
-                batch_date = batch_data,
-                status = "Pending"
-
-            )
+    try :
+        data = request.data 
+        if data["role"] == "Department Manager":
+            filter_indentory =  InventoryRecord.objects.filter(id = data["edit_id"])
+            if filter_indentory.exists():
+                try :
+                    batch_data = datetime.strptime(data["batch_date"], '%Y-%m-%d').date()
+                    print(batch_data)
+                    filter_indentory.update(
+                        product_name = data["product_name"], 
+                        vendor = data["vendor"],
+                        mrp = data["mrp"], 
+                        batch_num = data["batch_num"],
+                        quantity = data["quantity"],
+                        batch_date = batch_data,
+                        status = "Pending"
+                    )
+                    return JsonResponse({"success":True, "message" :"Successfuly Updated"})
+                except ValueError :
+                    return JsonResponse({"success": False, "message": "Invalid date format"}, status=400)
+            else :
+                return JsonResponse({"success": False, "message": "Inventory not found"}, status=404)
+        else:
+            return JsonResponse({"success": False, "message": "Invalid role"}, status=400)
+    except KeyError as e:
+        return JsonResponse({"success": False, "message": f"Missing field: {e}"}, status=400)
+    except Exception as e:
+        return JsonResponse({"success": False, "message": str(e)}, status=500)
 
 
 

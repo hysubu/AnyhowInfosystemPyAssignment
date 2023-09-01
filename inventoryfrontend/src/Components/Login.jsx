@@ -31,7 +31,7 @@ const Login = () => {
                 localStorage.setItem("token" , username)
                 localStorage.setItem("role", data.role)
                 alert(data.message)
-            }else{
+            }else if (data.success == false){
                 alert(data.message)
             }
         })
@@ -47,8 +47,8 @@ const Login = () => {
 
         <div >
             <form action="">
-                <input type="text" onChange={obj=> PickUsername(obj.target.value)} placeholder='username'/>
-                <input type="password" onChange={obj=> PickPassword(obj.target.value)} placeholder='password'  />
+                <input type="text" onChange={obj=> PickUsername(obj.target.value)} placeholder='username' required/>
+                <input type="password" onChange={obj=> PickPassword(obj.target.value)} placeholder='password' required  />
                 <button onClick={handleLogin} >Login</button>
             </form>
         </div>

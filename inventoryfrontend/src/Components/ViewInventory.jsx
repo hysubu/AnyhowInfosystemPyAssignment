@@ -8,7 +8,11 @@ const ViewInventory = () => {
   const [batchnum, PickBatchnum] = useState("")
   const [batchdate, PickBatchdate] = useState("")
   const [quantity, PickQuantity] = useState("")
+  const[editid, PickEditId] = useState()
 
+
+
+  // This function display the all Inventory data 
   const handleViewInventory = () => {
     let role = localStorage.getItem("role")
     let requestoptions = {
@@ -29,7 +33,7 @@ const ViewInventory = () => {
 
 
 
-
+// If Store manager or Department manager want to delete Inventory this function is work 
 
   const DeleteItem = (n) => {
     let input = {
@@ -62,7 +66,7 @@ const ViewInventory = () => {
 
 
 
-  // Approval Edit  
+  //When Store manager want to Approved the Inventory data this funtion is work   
 
   const Approve_store_manager = (n) => {
     let input = {
@@ -95,6 +99,8 @@ const ViewInventory = () => {
 
 
 
+// If Department manager want to Edit Inventory this function is edited the data 
+
 
   const EditItem_Department_manager = () =>{
     let input  = {
@@ -104,33 +110,59 @@ const ViewInventory = () => {
       batch_num  :batchnum,
       quantity : quantity,
       batch_date : batchdate,
-      role : localStorage.getItem("role")
-    }
-  }
-
-
-
-  const EditItem_fetch_data = (id) =>{
-    let input = {
       role : localStorage.getItem("role"),
-      item_id : id
+      edit_id : editid
     }
+
     let requestOption = {
-      method: 'POST',
-      headers: { 'Content-Type': 'Application/JSON'},
-      body: JSON.stringify(input)
-    }
-    fetch("", requestOption)
+      method:'PUT',
+      headers:{'Content-type':'application/json'},
+      body:JSON.stringify(input)}
+    fetch("http://127.0.0.1:8000/api/changeinventory/", requestOption)
     .then(response => response.json())
     .then(data=>{
-      if(data.success == true){
+      if(data.success  == true){
         alert(data.message)
       }else{
         alert(data.message)
       }
     })
+  }
+  
+  
 
-    
+// This fucntion display the Edit inventory data 
+
+  const EditItem_fetch_data = (id) =>{
+    alert(id)
+    let input = {
+      role : localStorage.getItem("role"),
+      item_id : parseInt(id)
+    }
+    let requestOption = {
+      method: 'POST',
+      headers: { 'Content-Type': 'Application/json'},
+      body: JSON.stringify(input)
+    }
+    fetch("http://127.0.0.1:8000/api/fetcheditinventory/", requestOption)
+    .then(response => response.json())
+    .then(data=>{
+      console.log(data)
+      console.log(data.data)
+      if(data.success == true){
+        PickProductname(data.data.product_name)
+        PickVendor(data.data.vendor)
+        PickBatchnum(data.data.batch_num)
+        PickBatchdate(data.data.batch_date)
+        PickMrp(data.data.mrp)
+        PickQuantity(data.data.quantity)
+        PickEditId(data.data.id)
+      }else{
+        alert(data.message)
+      }
+    })
+
+
   } 
 
 
@@ -178,8 +210,13 @@ const ViewInventory = () => {
                         <td>{item.fields.product_name}</td>
                         <td>{item.fields.status}</td>
                         <td>
-                          <button onClick={DeleteItem.bind(null, item.pk)}>Delete</button>
-                          <button onClick={EditItem_Department_manager.bind(null, item.pk)}>Edit</button>
+                          <button onClick={DeleteItem.bind(null,item.pk)}>Delete</button>
+                          { item.fields.status == "Approved" ?(
+                              <button onClick={EditItem_fetch_data.bind(null,item.pk)}>Edit</button>
+                          ):(
+                          <></>
+                          )
+                          }
                         </td>
                       </tr>
                     </>
@@ -192,21 +229,23 @@ const ViewInventory = () => {
       </div>
 
 
-{ localStorage.getItem("role") == "Department Manager" ? (
+{ localStorage.getItem("role") == "Department Manager"?(
+  
   <div className='Edit-form'>
+    <h2>Update Inventory</h2>
       <form action="">
-        <input type="text" onChange={obj => PickProductname(obj.target.value)} placeholder='Product name' />
+        <input type="text" value={productname} onChange={obj => PickProductname(obj.target.value)} placeholder='Product name' />
         <br />
-        <input type="text" onChange={obj => PickVendor(obj.target.value)} placeholder='Vendor' />
+        <input type="text" value={vendor}  onChange={obj => PickVendor(obj.target.value)} placeholder='Vendor' />
         <br />
-        <input type="text" onChange={obj => PickMrp(obj.target.value)} placeholder='MRP' />
+        <input type="text" value={mrp}  onChange={obj => PickMrp(obj.target.value)} placeholder='MRP' />
         <br />
-        <input type="text" onChange={obj => PickBatchnum(obj.target.value)} placeholder='Batch Num' />
+        <input type="text" value={batchnum} onChange={obj => PickBatchnum(obj.target.value)} placeholder='Batch Num' />
         <br />
-        <input type="date" onChange={obj => PickBatchdate(obj.target.value)} placeholder='Batch Date' />
+        <input type="date" value={batchdate} onChange={obj => PickBatchdate(obj.target.value)} placeholder='Batch Date' />
         <br />
-        <input type="text" onChange={obj => PickQuantity(obj.target.value)} placeholder='Quantity(Stock on Hand)' />
-        <button type="submit" onClick={EditItem_Department_manager}>Add</button>
+        <input type="text" value={quantity} onChange={obj => PickQuantity(obj.target.value)} placeholder='Quantity(Stock on Hand)' />
+        <button type="submit" onClick={EditItem_Department_manager}>Update</button>    
 
       </form>
       </div>

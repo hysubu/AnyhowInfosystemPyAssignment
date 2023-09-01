@@ -45,17 +45,17 @@ const AddInventory = () => {
 
         <div>
             <form action="">
-                <input type="text" onChange={obj => PickProductname(obj.target.value)} placeholder='Product name' />
+                <input type="text" onChange={obj => PickProductname(obj.target.value)} placeholder='Product name' required />
                 <br />
-                <input type="text" onChange={obj => PickVendor(obj.target.value)} placeholder='Vendor' />
+                <input type="text" onChange={obj => PickVendor(obj.target.value)} placeholder='Vendor' required />
                 <br />
-                <input type="text" onChange={obj => PickMrp(obj.target.value)} placeholder='MRP' />
+                <input type="text" onChange={obj => PickMrp(obj.target.value)} placeholder='MRP' required />
                 <br />
-                <input type="text" onChange={obj => PickBatchnum(obj.target.value)} placeholder='Batch Num' />
+                <input type="text" onChange={obj => PickBatchnum(obj.target.value)} placeholder='Batch Num' required />
                 <br />
-                <input type="date" onChange={obj => PickBatchdate(obj.target.value)} placeholder='Batch Date'  />
+                <input type="date" onChange={obj => PickBatchdate(obj.target.value)} placeholder='Batch Date' required  />
                 <br />
-                <input type="text" onChange={obj => PickQuantity(obj.target.value)} placeholder='Quantity(Stock on Hand)' />
+                <input type="text" onChange={obj => PickQuantity(obj.target.value)} placeholder='Quantity(Stock on Hand)' required />
 
                 <button type="submit" onClick={AddInventory}>Add</button>
 

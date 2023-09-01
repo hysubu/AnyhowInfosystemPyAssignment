@@ -39,11 +39,11 @@ const Signup = () => {
         <h2>Signup Here </h2>
     <div>
         <form action="">
-        <input type="text" onChange={obj => PickUsername(obj.target.value)} placeholder='Username' />
+        <input type="text" onChange={obj => PickUsername(obj.target.value)} placeholder='Username' required />
         <br />
-        <input type="email" onChange={obj => PickEmail(obj.target.value)}  placeholder='Email' />
+        <input type="email" onChange={obj => PickEmail(obj.target.value)}  placeholder='Email' required />
         <br />
-        <input type="password" onChange={obj => PickPassword(obj.target.value)}  placeholder='Password' />
+        <input type="password" onChange={obj => PickPassword(obj.target.value)}  placeholder='Password' required />
         <button onClick={handelSignup}>Submit</button>
         </form>
     </div>
