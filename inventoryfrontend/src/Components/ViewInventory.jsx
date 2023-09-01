@@ -66,7 +66,8 @@ const ViewInventory = () => {
 
 
 
-  //When Store manager want to Approved the Inventory data this funtion is work   
+  //When Store manager want to Approved the Inventory data this funtion is work  
+
 
   const Approve_store_manager = (n) => {
     let input = {
@@ -101,6 +102,9 @@ const ViewInventory = () => {
 
 // If Department manager want to Edit Inventory this function is edited the data 
 
+//  If The Inventory Status is Approved then the invetory will be access update 
+// When Department manager want  to update after updated  the inventory status will be Pending again 
+
 
   const EditItem_Department_manager = () =>{
     let input  = {
@@ -132,10 +136,6 @@ const ViewInventory = () => {
   
 
 // This fucntion display the Edit inventory data 
-
-
-
-
   const EditItem_fetch_data = (id) =>{
     alert(id)
     let input = {
