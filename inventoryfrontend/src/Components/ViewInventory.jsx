@@ -9,6 +9,7 @@ const ViewInventory = () => {
   const [batchdate, PickBatchdate] = useState("")
   const [quantity, PickQuantity] = useState("")
   const[editid, PickEditId] = useState()
+  const[status,Setstatus] = useState("")
 
 
 
@@ -70,6 +71,7 @@ const ViewInventory = () => {
 
 
   const Approve_store_manager = (n) => {
+    alert(status)
     let input = {
       edit_item: n,
       status: "Approved",
@@ -137,7 +139,6 @@ const ViewInventory = () => {
 
 // This fucntion display the Edit inventory data 
   const EditItem_fetch_data = (id) =>{
-    alert(id)
     let input = {
       role : localStorage.getItem("role"),
       item_id : parseInt(id)
@@ -207,9 +208,10 @@ const ViewInventory = () => {
                         <td>{index}</td>
                         <td>{item.fields.product_name}</td>
                         <td>
-                          <select name="" id="" onChange={(e) => Approve_store_manager(item.pk, e.target.value)}> {item.fields.status}
+                          <select name="" value={item.fields.status} id="" onChange={(e) => Approve_store_manager(item.pk,e.target.value)}> {item.fields.status}
+                          {/* <option value="">{item.fields.status}</option> */}
+                            <option value="Approved">Approved</option>
                             <option value="Pending">Pending</option>
-                            <option value="Approved" >Approved</option>
                           </select>
                         </td>
                         <td>

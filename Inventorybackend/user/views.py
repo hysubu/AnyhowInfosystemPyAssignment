@@ -131,7 +131,7 @@ def fetch_inventory(request):
             return JsonResponse({"success":True, "message":"successfull fetching", "all_inventory":py_to_json_approved})
         elif data == "Store Manager":
             print("dataa")
-            pending_inventory = InventoryRecord.objects.filter(status="Pending", delete=False) 
+            pending_inventory = InventoryRecord.objects.filter(delete=False) 
             py_to_json =  serializers.serialize('json', pending_inventory)
             print(py_to_json)
             return JsonResponse({"success":True, "message":"successfull fetching", "all_inventory":py_to_json })
@@ -150,6 +150,7 @@ def approved_inventory(request):
     try :
         if data["role"] == "Store Manager" :
             approval_inventory =  InventoryRecord.objects.filter(id = data["edit_item"])
+            print(data["status"])
             if approval_inventory.exists():
                 if len(approval_inventory) == 1 :
                     approval_inventory.update(
