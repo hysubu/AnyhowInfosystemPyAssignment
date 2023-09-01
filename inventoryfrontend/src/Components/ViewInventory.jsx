@@ -133,6 +133,9 @@ const ViewInventory = () => {
 
 // This fucntion display the Edit inventory data 
 
+
+
+
   const EditItem_fetch_data = (id) =>{
     alert(id)
     let input = {
@@ -144,24 +147,37 @@ const ViewInventory = () => {
       headers: { 'Content-Type': 'Application/json'},
       body: JSON.stringify(input)
     }
-    fetch("http://127.0.0.1:8000/api/fetcheditinventory/", requestOption)
-    .then(response => response.json())
-    .then(data=>{
-      console.log(data)
-      console.log(data.data)
-      if(data.success == true){
-        PickProductname(data.data.product_name)
-        PickVendor(data.data.vendor)
-        PickBatchnum(data.data.batch_num)
-        PickBatchdate(data.data.batch_date)
-        PickMrp(data.data.mrp)
-        PickQuantity(data.data.quantity)
-        PickEditId(data.data.id)
-      }else{
-        alert(data.message)
-      }
-    })
+    try {
+      fetch("http://127.0.0.1:8000/api/fetcheditinventory/", requestOption)
+      .then(response => response.json())
+      .then(data=>{
+        console.log(data)
+        console.log(data.data)
+        if(data.success == true){
+          PickProductname(data.data.product_name)
+          PickVendor(data.data.vendor)
+          PickBatchnum(data.data.batch_num)
+          PickBatchdate(data.data.batch_date)
+          PickMrp(data.data.mrp)
+          PickQuantity(data.data.quantity)
+          PickEditId(data.data.id)
+          handleViewInventory()
 
+        }else{
+          alert(data.message)
+        }
+      })
+    
+    .catch(error =>{
+      console.error("An error occurred:", error);
+      // Handle the error gracefully, e.g., show an error message to the user.
+      alert("An error occurred while fetching data.");
+    })
+  }catch(error){
+    console.error("An error occurred:", error);
+    // Handle the error gracefully, e.g., show an error message to the user.
+    alert("An error occurred while processing the request.");
+  }
 
   } 
 

@@ -20,15 +20,23 @@ const Signup = () => {
             headers:{"Content-type":"application/json"}, 
             body:JSON.stringify(input)
         }
+        try {
+
         fetch("http://127.0.0.1:8000/api/signup/" ,reqestOptions)
         .then(response => response.json())
-        .then(data =>{
+        .then( data =>{
             if(data.success == true){
                 alert(data.message)
             }else{
                 alert (data.message)
             }
+
         })
+    }catch(error){
+        console.error("An error occurred:", error);
+        alert("An error occurred while signing up.");
+
+    }
     }
 
 
