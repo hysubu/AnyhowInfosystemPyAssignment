@@ -1,0 +1,240 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+/* header */
+
+
+nav{
+  display: flex;
+  justify-content: right;
+  gap: 2rem;
+  padding: 1rem;
+  background-color: rgb(37, 37, 180);
+  color: aliceblue;
+
+  >.link{
+    text-decoration:none ;
+    color: antiquewhite;
+    font-weight: bold;
+
+  }
+}
+
+
+
+
+
+
+/* Signup */
+
+
+
+.signup-div{
+  background-color: #c9d3d6;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  /* justify-content: center; */
+  display: flex;
+  flex-direction: column; 
+  >div{
+    >form{
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      border: 1px solid black;
+      padding: 80px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 2px 5px rgb(185, 185, 185);
+
+      >input{
+        width: 300px;
+        height: 40px;
+        border-radius: 10px;
+        font-size: 16px;
+      }
+      >button{
+        width: 100px;
+        height: 30px;
+        background-color: cadetblue;
+        border: none;
+        border-radius: 3px;
+        box-shadow:2px 2px 2px 1px rgb(185, 185, 185) ;
+        align-self: center;
+      }
+    }
+  }
+}
+
+/* login */
+
+
+
+.login-div{
+  background-color: #c9d3d6;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  /* justify-content: center; */
+  display: flex;
+  flex-direction: column; 
+
+  >div{
+    >form{
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      border: 1px solid black;
+      padding: 100px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 2px 5px rgb(185, 185, 185);
+
+      >input{
+        width: 300px;
+        height: 40px;
+        border-radius: 10px;
+        font-size: 16px;
+      }
+      >button{
+        width: 100px;
+        height: 30px;
+        background-color: cadetblue;
+        border: none;
+        border-radius: 3px;
+        box-shadow:2px 2px 2px 1px rgb(185, 185, 185) ;
+        align-self: center;
+      }
+    }
+  }
+}
+
+/* add inventory */
+
+
+.addinventory-div{
+  background-color: #c9d3d6;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  >h2{
+    text-decoration: underline;
+  }
+
+  >div{
+    >form{
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      /* border: 1px solid black; */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 1px 2px 1px rgb(95, 95, 95);
+
+      >input{
+        width: 300px;
+        height: 30px;
+        border-radius: 4px;
+        font-size: 16px;
+        border: none;
+      }
+      >button{
+        width: 100px;
+        height: 30px;
+        background-color: cadetblue;
+        border: none;
+        border-radius: 3px;
+        box-shadow:2px 2px 2px 1px rgb(185, 185, 185) ;
+        align-self: center;
+        margin-top: 10px;
+      }
+    }
+  }
+
+}
+
+.view-inventory-div{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  >div{
+    width: 80%;
+    >table{
+      border: 1px solid black;
+      width: 100%;
+      box-shadow:2px 2px 2px 2px rgb(156, 156, 156);
+    
+      >thead{
+        color: rgb(12, 27, 59);
+        align-items: center;
+        justify-content: left;
+        text-align: left;
+        border-bottom: 1px solid black;
+        >tr{
+          text-align: center;
+          >th{
+            padding-bottom: 10px;
+            padding-right: 20px;  
+          }
+        }
+      }
+      >tbody{
+        align-items: center;
+        text-align: center;
+        border: 1px solid black;
+        
+      }
+    }
+  }
+}
+
+
+
+/* Edit */
+
+.Edit-form{
+  justify-content: center;
+  display: flex;
+  margin-top: 10px;
+}
