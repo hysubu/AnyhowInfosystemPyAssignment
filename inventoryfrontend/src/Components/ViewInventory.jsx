@@ -24,6 +24,7 @@ const ViewInventory = () => {
       .then(response => response.json())
       .then(data => {
         let all_inventory = JSON.parse(data.all_inventory)
+        alert(data.message)
         console.log(all_inventory)
         setAllinventory(all_inventory);
 

@@ -10,8 +10,10 @@ from rest_framework.decorators import api_view
 from datetime import datetime
 from django.core import serializers
 
-# Create your views here.
+# caching -----------------------------------------------------------------
+from django.core.cache import cache
 
+# Create your views here.
 
 #  User SignUp API  
 @csrf_exempt
@@ -124,11 +126,26 @@ def fetch_inventory(request):
         print("fetch", data)
         if data == "Department Manager" :
             print("data")
-            all = InventoryRecord.objects.filter(delete = False)
-            print(all)
-            all_inventory = InventoryRecord.objects.filter(delete = False) 
-            py_to_json_approved = serializers.serialize('json',all_inventory)
-            return JsonResponse({"success":True, "message":"successfull fetching", "all_inventory":py_to_json_approved})
+            cache_data = cache.get("my_data")
+            if cache_data is not None : 
+                print("cachedata_notnone" , cache_data)
+                # all_inventory = InventoryRecord.objects.filter(delete = False) 
+                # py_to_json_approved = serializers.serialize('json',all_inventory)
+                return JsonResponse({"success":True, "message":"successfull fetching-get-cahch-data","all_inventory":cache_data})
+            else:
+                # all = InventoryRecord.objects.filter(delete = False)
+                all_inventory = InventoryRecord.objects.filter(delete = False) 
+                py_to_json_approved = serializers.serialize('json',all_inventory)
+                data = cache.set("my_data" ,py_to_json_approved , 60)
+                print("cache_data " , cache.get("my_data"))
+                return JsonResponse({"success":True, "message":"successfull fetching-set-cache", "all_inventory":py_to_json_approved })
+
+
+            
+            # print(all)
+           
+            # py_to_json_approved = serializers.serialize('json',all_inventory)
+            # return JsonResponse({"success":True, "message":"successfull fetching", "all_inventory":py_to_json_approved})
         elif data == "Store Manager":
             print("dataa")
             pending_inventory = InventoryRecord.objects.filter(delete=False) 

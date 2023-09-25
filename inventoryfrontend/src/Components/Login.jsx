@@ -22,7 +22,7 @@ const Login = () => {
             body:JSON.stringify(input)
         }
 
-        fetch("http://127.0.0.1:8000/api/login/" , requestoption)
+        fetch("http://127.0.0.1:8000/api/login/" ,requestoption)
         .then(response => response.json())
         .then(data => {
             if(data.success == true){

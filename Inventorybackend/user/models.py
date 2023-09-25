@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class Role(models.Model):
@@ -31,7 +32,9 @@ class InventoryRecord(models.Model):
     delete = models.BooleanField(null=True, blank=True ,default=False)
 
 
-
+# class TryDatabase(AbstractUser):
+#     phone = models.IntegerField()
+#     password_key = models.TextField()
 
 
 
